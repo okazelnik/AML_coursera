@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import sys
 sys.path.append("..")
 import grading
-grader = grading.Grader(assignment_key="UaHtvpEFEee0XQ6wjK-hZg", 
+grader = grading.Grader(assignment_key="UaHtvpEFEee0XQ6wjK-hZg",
                       all_parts=["xU7U4", "HyTF6", "uNidL", "ToK7N", "GBdgZ", "dLdHG"])
 
 pip install grading
@@ -146,7 +146,7 @@ def compute_loss(X, y, w):
     Keep in mind that our loss is averaged over all samples (rows) in X.
     """
     l = X.shape[0]
-    loss_compute = (-1 / l) * np.sum(np.dot(np.log(y.T, probability(X, w))) + np.dot((1- y).T, np.log(1 - probability(X, w))))
+    loss_compute = (-1 / l) * np.sum(np.dot(np.log(y.T, probability(X, w))) + np.dot(np.subtract(1, y.T), np.log(1 - probability(X, w))))
     return loss_compute
 
 # use output of this cell to fill answer field 
@@ -176,7 +176,9 @@ def compute_grad(X, y, w):
     Keep in mind that our loss is averaged over all samples (rows) in X.
     """
     
-    # TODO<your code here>
+    l = X.shape[0]
+    predictions = probability(X, w)
+    return (1 / l) * np.dot(np.subtract(predictions, y).T, X)
 
 # use output of this cell to fill answer field 
 ans_part3 = np.linalg.norm(compute_grad(X_expanded, y, dummy_weights))
@@ -246,7 +248,7 @@ for i in range(n_iter):
         visualize(X_expanded[ind, :], y[ind], w, loss)
 
     # Keep in mind that compute_grad already does averaging over batch for you!
-    # TODO:<your code here>
+    w = w - eta * compute_grad(X_expanded[ind, :], y[ind], w)
 
 visualize(X, y, w, loss)
 plt.clf()
@@ -295,7 +297,8 @@ for i in range(n_iter):
     if i % 10 == 0:
         visualize(X_expanded[ind, :], y[ind], w, loss)
 
-    # TODO:<your code here>
+    nu = alpha * nu + eta * compute_grad(X_expanded[ind, :], y[ind], w)
+    w = w - nu
 
 visualize(X, y, w, loss)
 plt.clf()
