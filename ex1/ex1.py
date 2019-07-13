@@ -120,7 +120,8 @@ def probability(X, w):
     :returns: an array of predicted probabilities in [0,1] interval.
     """
 
-    # TODO:<your code here>
+    dot = np.dot(w.T, X)
+    return 1 / (1 + np.exp(-dot))
 
 dummy_weights = np.linspace(-1, 1, 6)
 ans_part1 = probability(X_expanded[:1, :], dummy_weights)[0]
@@ -144,7 +145,9 @@ def compute_loss(X, y, w):
     and weight vector w [6], compute scalar loss function L using formula above.
     Keep in mind that our loss is averaged over all samples (rows) in X.
     """
-    # TODO:<your code here>
+    l = X.shape[0]
+    loss_compute = (-1 / l) * np.sum(np.dot(np.log(y.T, probability(X, w))) + np.dot((1- y).T, np.log(1 - probability(X, w))))
+    return loss_compute
 
 # use output of this cell to fill answer field 
 ans_part2 = compute_loss(X_expanded, y, dummy_weights)
